@@ -12,7 +12,7 @@ class HomePage extends StatefulWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Text("Home"),
+      body: Text(''),
     );
   }
   }

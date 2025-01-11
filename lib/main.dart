@@ -17,11 +17,51 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'NetworkK',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 17, 179, 168)),
+        colorScheme: ColorScheme(
+          brightness: Brightness.light,
+          primary: Colors.deepPurple,
+          onPrimary: Colors.white, 
+          secondary: Colors.deepPurpleAccent,
+          onSecondary: Colors.white,
+          surface: Colors.deepPurple.shade50,
+          onSurface: Colors.deepPurple.shade800,
+          error: Colors.red,
+          onError: Colors.white,
+          background: Colors.deepPurple.shade100,
+          onBackground: Colors.deepPurple.shade900,
+        ),
         useMaterial3: true,
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: Colors.deepPurple.shade50,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12.0),
+            borderSide: BorderSide.none,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12.0),
+            borderSide: BorderSide(color: Colors.deepPurple.shade200),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12.0),
+            borderSide: BorderSide(color: Colors.deepPurple, width: 2),
+          ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.deepPurple,
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            elevation: 2,
+          ),
+        ),
       ),
+      title: 'NetworkK',
       home: const MyHomePage(title: 'NetworkK'),
     );
   }
@@ -63,6 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     var box = Hive.box('userDataBox');
     String? uname = box.get('username');
+    // uname = null;
 
     // If username is null, navigate to the login page, else show home page
     if (uname == null) {
@@ -72,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          backgroundColor: Color.fromARGB(255, 255, 254, 242),
           title: Center(child: Text(widget.title)),
         ),
         body: dynamicPage, // Use the dynamic page based on selected index
@@ -91,33 +132,12 @@ class _MyHomePageState extends State<MyHomePage> {
               label: 'Profile',
             ),
           ],
+          iconSize: 35,
           currentIndex: _selectedIndex,
-          selectedItemColor: Color.fromARGB(255, 17, 179, 168),
+          selectedItemColor: Color.fromARGB(255, 101, 11, 237),
           onTap: _onItemClicked,
         ),
       );
     }
   }
 }
-/*
-// Example dynamic pages
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text('Home Page Content'));
-  }
-}
-
-class SearchPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text('Search Page Content'));
-  }
-}
-
-class ProfilePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text('Profile Page Content'));
-  }
-}*/
