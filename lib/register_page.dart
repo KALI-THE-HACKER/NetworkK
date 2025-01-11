@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:networkk/main.dart';
 import 'login_page.dart';
 import 'package:http/http.dart' as http;
+import 'package:hive_flutter/hive_flutter.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -66,13 +68,13 @@ class _RegisterPageState extends State<RegisterPage> with SingleTickerProviderSt
     if (_formKey.currentState?.validate() ?? false) {
       if (_passwordController.text != _confirmPasswordController.text) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Passwords do not match')),
+          const SnackBar(content: Text('Password do not match')),
         );
         return;
       }
 
       final response = await http.post(
-        Uri.parse('http://127.0.0.1:8000/register'),
+        Uri.parse('http://10.53.15.225:8000/register/'),
         body: {
           'username': _usernameController.text,
           'email': _emailController.text,
@@ -80,14 +82,15 @@ class _RegisterPageState extends State<RegisterPage> with SingleTickerProviderSt
         },
       );
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
+        var box = Hive.box('userDataBox');
+        await box.put('username', _usernameController.text);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('User registered successfully')),
+          const SnackBar(
+            content: Text('Login Succesfull!')),
         );
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => const LoginPage(),
-          ),
+          MaterialPageRoute(builder: (context) => const MyHomePage(title: "NetworkK",)),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'register_page.dart';
 import 'package:http/http.dart' as http;
 import 'main.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -19,7 +20,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
 
-  final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
@@ -44,7 +45,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   @override
   void dispose() {
     _animationController.dispose();
-    _emailController.dispose();
+    _usernameController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -60,16 +61,22 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
       final response = await http.post(
         Uri.parse('http://10.53.15.225:8000/'),
         body: {
-          'email': _emailController.text,
+          'username': _usernameController.text,
           'password': _passwordController.text,
           
         },
         
       );
-      print(_emailController.text);
       if (response.statusCode == 200) {
+        print("Succesfully logged in "+ _usernameController.text);
         // Handle successful login
-        print("success");
+        var box = Hive.box('userDataBox');
+        await box.put('username', _usernameController.text);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Login Succesfull!')),
+        );
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const MyHomePage(title: "NetworkK",)),
         );
@@ -137,7 +144,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                         ),
                         const SizedBox(height: 40),
                         TextFormField(
-                          controller: _emailController,
+                          controller: _usernameController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your email';
