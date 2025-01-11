@@ -1,5 +1,7 @@
+// login_page.dart
 import 'package:flutter/material.dart';
-import 'register_page.dart';
+import 'register.dart';
+import 'package:http/http.dart' as http;
 import 'main.dart';
 
 class LoginPage extends StatefulWidget {
@@ -51,14 +53,29 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
     });
   }
 
-  void _handleLogin() {
+  void _handleLogin() async {
     if (_formKey.currentState?.validate() ?? false) {
-      // Here you would typically handle authentication
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const MyHomePage(title: 'NetworkK Home'),
-        ),
+      final response = await http.post(
+        Uri.parse('http://127.0.0.1:8000/'),
+        body: {
+          'email': _emailController.text,
+          'password': _passwordController.text,
+        },
       );
+
+      if (response.statusCode == 200) {
+        // Handle successful login
+        print("success");
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const MyHomePage(title: "NetworkK",)),
+        );
+      } else {
+        // Handle login failure
+        print("fail");
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Login failed. Please try again.')),
+        );
+      }
     }
   }
 
@@ -135,9 +152,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                             if (value == null || value.isEmpty) {
                               return 'Please enter your password';
                             }
-                            if (value.length < 7) {
-                              return 'Password must be at least 6 characters';
-                            }
+                            
                             return null;
                           },
                           obscureText: _obscureText,
@@ -148,8 +163,8 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                             suffixIcon: IconButton(
                               icon: Icon(
                                 _obscureText 
-                                  ? Icons.visibility_outlined
-                                  : Icons.visibility_off_outlined,
+                                  ? Icons.visibility_off_outlined
+                                  :  Icons.visibility_outlined,
                               ),
                               onPressed: _togglePasswordVisibility,
                             ),
