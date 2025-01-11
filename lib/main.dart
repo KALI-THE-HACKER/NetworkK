@@ -4,6 +4,7 @@ import 'login_page.dart';
 import 'home_page.dart';
 import 'search_page.dart';
 import 'profile_page.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -18,49 +19,50 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        colorScheme: ColorScheme(
-          brightness: Brightness.light,
-          primary: Colors.deepPurple,
-          onPrimary: Colors.white, 
-          secondary: Colors.deepPurpleAccent,
-          onSecondary: Colors.white,
-          surface: Colors.deepPurple.shade50,
-          onSurface: Colors.deepPurple.shade800,
-          error: Colors.red,
-          onError: Colors.white,
-          background: Colors.deepPurple.shade100,
-          onBackground: Colors.deepPurple.shade900,
-        ),
-        useMaterial3: true,
-        inputDecorationTheme: InputDecorationTheme(
-          filled: true,
-          fillColor: Colors.deepPurple.shade50,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12.0),
-            borderSide: BorderSide.none,
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12.0),
-            borderSide: BorderSide(color: Colors.deepPurple.shade200),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12.0),
-            borderSide: BorderSide(color: Colors.deepPurple, width: 2),
-          ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            foregroundColor: Colors.white,
-            backgroundColor: Colors.deepPurple,
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            elevation: 2,
-          ),
-        ),
+    colorScheme: ColorScheme(
+    brightness: Brightness.light,
+    primary: Color.fromARGB(255, 57, 170, 234), // Primary theme color
+    onPrimary: Colors.white,                   // Text/icon color on primary
+    secondary: Color.fromARGB(255, 56, 177, 235), // Accent color
+    onSecondary: Colors.white,                 // Text/icon color on secondary
+    surface: Color.fromARGB(255, 30, 36, 48),  // Background of cards and sheets
+    onSurface: Colors.white,                   // Text/icon color on surface
+    background: Color.fromARGB(255, 30, 36, 48), // Scaffold background color
+    onBackground: Colors.white,                // Text/icon color on background
+    error: Colors.red,                         // Error color
+    onError: Colors.white,                     // Text/icon color on error
+  ),
+  useMaterial3: true,                          // Ensures compatibility with Material 3 design
+  inputDecorationTheme: InputDecorationTheme(
+    filled: true,
+    fillColor: Color.fromARGB(255, 30, 36, 48), // Fill color for input fields
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12.0),
+      borderSide: BorderSide.none,
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12.0),
+      borderSide: BorderSide(color: Color.fromARGB(255, 56, 177, 235)),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12.0),
+      borderSide: BorderSide(color: Color.fromARGB(255, 57, 170, 234), width: 2),
+    ),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+  ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      foregroundColor: Colors.white,
+      backgroundColor: Color.fromARGB(255, 153, 86, 183), // Button background
+      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
       ),
+      elevation: 2,
+    ),
+  ),
+),
+
       title: 'NetworkK',
       home: const MyHomePage(title: 'NetworkK'),
     );
@@ -113,8 +115,16 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 255, 254, 242),
-          title: Center(child: Text(widget.title)),
+          // backgroundColor: Color.fromARGB(255, 255, 254, 242),
+          title: Center(child:
+            Text(widget.title,
+            style: GoogleFonts.pacifico(
+              textStyle: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontWeight: FontWeight.bold,
+              fontSize: 30,
+            ),
+      ),),),
         ),
         body: dynamicPage, // Use the dynamic page based on selected index
         bottomNavigationBar: BottomNavigationBar(
@@ -134,7 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
           iconSize: 35,
           currentIndex: _selectedIndex,
-          selectedItemColor: Color.fromARGB(255, 101, 11, 237),
+          // selectedItemColor: Color.fromARGB(255, 101, 11, 237),
           onTap: _onItemClicked,
         ),
       );

@@ -1,6 +1,8 @@
 // login_page.dart
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
-import 'register.dart';
+import 'register_page.dart';
 import 'package:http/http.dart' as http;
 import 'main.dart';
 
@@ -56,13 +58,15 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   void _handleLogin() async {
     if (_formKey.currentState?.validate() ?? false) {
       final response = await http.post(
-        Uri.parse('http://127.0.0.1:8000/'),
+        Uri.parse('http://10.53.15.225:8000/'),
         body: {
           'email': _emailController.text,
           'password': _passwordController.text,
+          
         },
+        
       );
-
+      print(_emailController.text);
       if (response.statusCode == 200) {
         // Handle successful login
         print("success");
@@ -85,13 +89,14 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Theme.of(context).colorScheme.primaryContainer,
-              Theme.of(context).colorScheme.surface,
-            ],
-          ),
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color.fromARGB(255, 57, 170, 234), // Start color
+            Color.fromARGB(255, 30, 36, 48),  // End color
+          ],
+        ),
+
         ),
         child: SafeArea(
           child: Padding(
