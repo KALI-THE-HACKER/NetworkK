@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'main.dart';
 import 'login_page.dart';
 import 'package:http/http.dart' as http;
 
@@ -21,7 +20,6 @@ class _RegisterPageState extends State<RegisterPage> with SingleTickerProviderSt
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-
 
   @override
   void initState() {
@@ -88,14 +86,13 @@ class _RegisterPageState extends State<RegisterPage> with SingleTickerProviderSt
         );
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-        builder: (context) => const LoginPage(),
+            builder: (context) => const LoginPage(),
           ),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Registration failed')),
         );
-      }
       }
     }
   }
