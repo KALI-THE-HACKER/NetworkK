@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
 import 'login_page.dart';
+import 'package:http/http.dart' as http;
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -63,14 +64,39 @@ class _RegisterPageState extends State<RegisterPage> with SingleTickerProviderSt
     });
   }
 
-  void _handleRegister() {
+  void _handleRegister() async {
     if (_formKey.currentState?.validate() ?? false) {
-      // Here you would typically handle user registration
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const MyHomePage(title: 'NetworkK Home'),
-        ),
+      if (_passwordController.text != _confirmPasswordController.text) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Passwords do not match')),
+        );
+        return;
+      }
+
+      final response = await http.post(
+        Uri.parse('http://127.0.0.1:8000/register'),
+        body: {
+          'username': _usernameController.text,
+          'email': _emailController.text,
+          'password': _passwordController.text,
+        },
       );
+
+      if (response.statusCode == 201) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('User registered successfully')),
+        );
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+        builder: (context) => const LoginPage(),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Registration failed')),
+        );
+      }
+      }
     }
   }
 
