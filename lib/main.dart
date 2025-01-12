@@ -5,6 +5,8 @@ import 'home_page.dart';
 import 'search_page.dart';
 import 'profile_page.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'newpost_page.dart';
+import 'package:flutter/cupertino.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -78,7 +80,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 2;
+  int _selectedIndex = 0;
 
   // Dynamic pages
   Widget get dynamicPage {
@@ -88,7 +90,9 @@ class _MyHomePageState extends State<MyHomePage> {
       case 1:
         return SearchPage();
       case 2:
-        return ProfilePage();
+        return NewpostPage();
+      case 3:
+        return ProfilePage(initialBio: 'Add your bio here', onSave: (String ) {  },);
       default:
         return HomePage(); // Default page in case of an unknown index
     }
@@ -130,24 +134,31 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: dynamicPage,
         bottomNavigationBar: BottomNavigationBar(
-          backgroundColor:Color.fromARGB(255, 255, 255, 255) ,
+          type: BottomNavigationBarType.fixed,
+          backgroundColor:Color.fromARGB(255, 255, 255, 255),
+          elevation: 0,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
+              icon: Icon(CupertinoIcons.house_fill),
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.search_outlined),
+              icon: Icon(CupertinoIcons.search),
               label: 'Search',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle),
+              icon: Icon(CupertinoIcons.create),
+              label: 'Create Post',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.person),
               label: 'Profile',
             ),
           ],
-          iconSize: 35,
+          iconSize: 25,
           currentIndex: _selectedIndex,
           selectedItemColor: Color.fromARGB(255, 86, 142, 245),
+          unselectedItemColor: Colors.blueGrey,
           onTap: _onItemClicked,
         ),
 

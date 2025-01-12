@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: Color.fromARGB(235, 255, 255, 255),
       body: SafeArea(
         child: FutureBuilder<List<StartupData>>(
           future: fetchData(),
@@ -122,7 +122,7 @@ class _HomePageState extends State<HomePage> {
                                     SizedBox(height: 8),
                                     Text('Description: ${startup.description}'),
                                     SizedBox(height: 4),
-                                    Text('Founder: ${startup.founder}'),
+                                    // Text('Founder: ${startup.founder}'),
                                   ],
                                 ),
                               ),
