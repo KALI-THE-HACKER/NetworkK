@@ -1,6 +1,6 @@
 # 🌐 Welcome to **NetworkK** 🚀
 
-![NetworkK Logo](https://via.placeholder.com/600x150.png?text=NetworkK+Logo)
+![NetworkK Logo]([https://via.placeholder.com/600x150.png?text=NetworkK+Logo](https://i.ibb.co/T2NMWdQ/networkk.png))
 
 ---
 
