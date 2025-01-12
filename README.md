@@ -1,5 +1,4 @@
 # 🌐 Welcome to **NetworkK** 🚀
-<img src="[traventure-screenshot.png](https://i.ibb.co/T2NMWdQ/networkk.png)" alt="image" width="100">
 
 ---
 
