@@ -23,16 +23,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme(
           brightness: Brightness.light,
-          primary: Colors.deepPurple,
+          primary: Color.fromARGB(255, 86, 142, 245),
           onPrimary: Colors.white, 
-          secondary: Colors.deepPurpleAccent,
+          secondary: Color.fromARGB(255, 86, 142, 245),
           onSecondary: Colors.white,
           surface: Colors.deepPurple.shade50,
-          onSurface: Colors.deepPurple.shade800,
+          onSurface: Color.fromARGB(255, 86, 142, 245),
           error: Colors.red,
           onError: Colors.white,
           background: Colors.deepPurple.shade100,
-          onBackground: Colors.deepPurple.shade900,
+          onBackground: Color.fromARGB(255, 86, 142, 245),
         ),
         useMaterial3: true,
         inputDecorationTheme: InputDecorationTheme(
@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12.0),
-            borderSide: BorderSide(color: Colors.deepPurple.shade200),
+            borderSide: BorderSide(color: Color.fromARGB(255, 86, 142, 245)),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12.0),
@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             foregroundColor: Colors.white,
-            backgroundColor: Colors.deepPurple,
+            backgroundColor: Color.fromARGB(255, 86, 142, 245),
             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
@@ -115,6 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     var box = Hive.box('userDataBox');
+    
     String? uname = box.get('username');
     print("##################");
     print(uname);
@@ -129,9 +130,11 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       return Scaffold(
         appBar: AppBar(
+          
           backgroundColor: Color.fromARGB(255, 255, 255, 255),
           title: Center(child: Text(widget.title, style: GoogleFonts.exo2(color: const Color.fromARGB(255, 0, 0, 0), fontSize: 32, fontWeight: FontWeight.bold),)),
         ),
+        
         body: dynamicPage,
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,

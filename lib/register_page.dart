@@ -68,13 +68,13 @@ class _RegisterPageState extends State<RegisterPage> with SingleTickerProviderSt
     if (_formKey.currentState?.validate() ?? false) {
       if (_passwordController.text != _confirmPasswordController.text) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Password do not match')),
+          const SnackBar(content: Text('Passwords do not match')),
         );
         return;
       }
 
       final response = await http.post(
-        Uri.parse('http://10.53.15.225:8000/register/'),
+        Uri.parse('https://networkk.onrender.com/register/'),
         body: {
           'username': _usernameController.text,
           'email': _emailController.text,
@@ -87,10 +87,11 @@ class _RegisterPageState extends State<RegisterPage> with SingleTickerProviderSt
         await box.put('username', _usernameController.text);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Login Succesfull!')),
+            content: Text('Registration Successful!'),
+          ),
         );
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const MyHomePage(title: "NetworkK",)),
+          MaterialPageRoute(builder: (context) => const MyHomePage(title: "NetworkK")),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -109,9 +110,9 @@ class _RegisterPageState extends State<RegisterPage> with SingleTickerProviderSt
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Theme.of(context).colorScheme.primaryContainer,
-              Theme.of(context).colorScheme.surface,
-            ],
+            Color.fromARGB(255, 57, 170, 234), // Start color
+            Color.fromARGB(255, 30, 36, 48),  // End color
+          ],
           ),
         ),
         child: SafeArea(
@@ -146,7 +147,7 @@ class _RegisterPageState extends State<RegisterPage> with SingleTickerProviderSt
                               radius: 50,
                               backgroundColor: Colors.transparent,
                               backgroundImage: NetworkImage(
-                                'https://www.hollywoodreporter.com/wp-content/uploads/2012/12/img_logo_blue.jpg?w=1440&h=810&crop=1',
+                                'https://i.ibb.co/T2NMWdQ/networkk.png',
                               ),
                             ),
                           ),

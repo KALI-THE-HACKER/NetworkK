@@ -42,11 +42,13 @@ class Founder {
 }
 
 class StartupData {
+  final int id;
   final String name;
   final String description;
   // final Founder founder;
 
   StartupData({
+    required this.id,
     required this.name,
     required this.description,
     // required this.founder,
@@ -54,6 +56,7 @@ class StartupData {
 
   factory StartupData.fromJson(Map<String, dynamic> json) {
     return StartupData(
+      id: json['id'] ?? 1,
       name: json['name'] ?? 'No name available',
       description: json['desc'] ?? 'No description available',
       // founder: Founder.fromJson(json['founder']),

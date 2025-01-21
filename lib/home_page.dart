@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:hive/hive.dart';
+import 'package:networkk/detailed_view.dart';
 import 'data_model.dart';
 import 'package:networkk/home_page.dart';
 
@@ -23,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<List<StartupData>> fetchData() async {
-    final response = await http.get(Uri.parse('http://10.53.15.225:8000/home/'));
+    final response = await http.get(Uri.parse('https://networkk.onrender.com:/home/'));
 
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = jsonDecode(response.body);
@@ -93,41 +94,57 @@ class _HomePageState extends State<HomePage> {
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
                           final startup = startups[index];
-                          return Card(
-                            margin: EdgeInsets.only(bottom: 12.0),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                image: DecorationImage(
-                                  image: NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyKNAB33tfPkHBfJuzwsQM_TArlz4b2t19bw&s'),
-                                  opacity: 0.5,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      startup.name,
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(height: 8),
-                                    Text('Description: ${startup.description}'),
-                                    SizedBox(height: 4),
-                                    // Text('Founder: ${startup.founder}'),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
+                          return GestureDetector(
+              onTap: () {
+                // Handle click event here
+                // For example, navigate to a new page or show more details
+                print('Clicked on: ${startup.name}');
+                // Navigate to another screen with result details:
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => StartupDetailPage(startupId: startup.id),
+                  ),
+                );
+              },
+              child: Card(
+                margin: EdgeInsets.only(bottom: 12.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    image: DecorationImage(
+                      image: NetworkImage(
+                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyKNAB33tfPkHBfJuzwsQM_TArlz4b2t19bw&s'),
+                      opacity: 0.5,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          startup.name,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text('Description: ${startup.description}'),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+                          
+                          
+                          
                         },
                         childCount: startups.length,
                       ),

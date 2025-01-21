@@ -1,223 +1,177 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'detailed_view.dart';
 
-// Add Startup model to properly handle the data
-class Startup {
+class DataModel {
   final int id;
   final String name;
+  final String desc;
 
-  const Startup({
-    required this.id,
-    required this.name,
-  });
+  DataModel({required this.id, required this.name, required this.desc});
 
-  factory Startup.fromJson(Map<String, dynamic> json) {
-    return Startup(
-      id: json['id'] as int,
-      name: json['name'] as String,
+  factory DataModel.fromJson(Map<String, dynamic> json) {
+    return DataModel(
+      id: json['id'] ?? 1,
+      name: json['name'] ?? 'No Name',
+      desc: json['desc'] ?? 'No Description',
     );
   }
 }
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
-
   @override
-  State<SearchPage> createState() => _SearchPageState();
+  _SearchPageState createState() => _SearchPageState();
 }
 
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
-  final FocusNode _searchFocus = FocusNode();
-  bool _isSearching = false;
-  List<Startup> _searchResults = [];  // Changed to List<Startup>
-  String _errorMessage = '';
+  List<DataModel> _searchResults = [];
+  bool _isLoading = false;
+  String _error = '';
 
-  @override
-  void dispose() {
-    _searchController.dispose();
-    _searchFocus.dispose();
-    super.dispose();
-  }
-
-  Future<void> _searchPosts(String query) async {
+  Future<void> _performSearch(String query) async {
     if (query.isEmpty) {
       setState(() {
         _searchResults = [];
-        _isSearching = false;
+        _error = '';
       });
       return;
     }
 
-    setState(() => _isSearching = true);
+    setState(() {
+      _isLoading = true;
+      _error = '';
+    });
 
     try {
-      final url = Uri.parse('http://10.53.15.225:8000/search/');
       final response = await http.get(
-        url,
-        headers: {'Content-Type': 'application/json'},
+        Uri.parse('https://networkk.onrender.com:/search?query=${Uri.encodeComponent(query)}'),
       );
 
       if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
+        final List<dynamic> data = json.decode(response.body);
+
         setState(() {
-          _searchResults = data.map((item) => Startup.fromJson(item)).toList();
-          _errorMessage = '';
+          _searchResults = data.map((item) => DataModel.fromJson(item)).toList();
+          _isLoading = false;
         });
       } else {
         setState(() {
-          _errorMessage = 'Failed to load results. Please try again.';
+          _error = 'Failed to fetch results';
+          _isLoading = false;
         });
       }
     } catch (e) {
       setState(() {
-        _errorMessage = 'An error occurred. Please check your connection.';
+        _error = 'An error occurred: $e';
+        _isLoading = false;
       });
-    } finally {
-      setState(() => _isSearching = false);
     }
-  }
-
-  void _handleSearch(String query) {
-    _searchPosts(query);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F9FF),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: const Text(
-          'Search',
-          style: TextStyle(
-            color: Color(0xFF2C3E50),
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      body: Column(
-        children: [
-          Container(
-            color: Colors.white,
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-            child: Column(
-              children: [
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  height: 48,
+      backgroundColor: Color.fromARGB(235, 255, 255, 255),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Search...',
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () => _performSearch(_searchController.text),
+                ),
+                border: OutlineInputBorder(),
+              ),
+              onSubmitted: _performSearch,
+            ),
+            SizedBox(height: 16),
+            if (_isLoading)
+              Center(child: CircularProgressIndicator())
+            else if (_error.isNotEmpty)
+              Text(
+                _error,
+                style: TextStyle(color: Colors.red),
+              )
+            else
+              Expanded(
+  child: _searchResults.isNotEmpty
+      ? ListView.builder(
+          itemCount: _searchResults.length,
+          itemBuilder: (context, index) {
+            final result = _searchResults[index];
+            return GestureDetector(
+              onTap: () {
+                // Handle click event here
+                // For example, navigate to a new page or show more details
+                print('Clicked on: ${result.name}');
+                // Navigate to another screen with result details:
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => StartupDetailPage(startupId: result.id),
+                  ),
+                );
+              },
+              child: Card(
+                margin: EdgeInsets.only(bottom: 12.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Container(
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF0F5FF),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: _isSearching
-                          ? const Color(0xFF4A90E2)
-                          : Colors.transparent,
+                    borderRadius: BorderRadius.circular(15),
+                    image: DecorationImage(
+                      image: NetworkImage(
+                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyKNAB33tfPkHBfJuzwsQM_TArlz4b2t19bw&s'),
+                      opacity: 0.5,
+                      fit: BoxFit.cover,
                     ),
                   ),
-                  child: TextField(
-                    controller: _searchController,
-                    focusNode: _searchFocus,
-                    onChanged: _handleSearch,
-                    decoration: InputDecoration(
-                      hintText: 'Search...',
-                      hintStyle: TextStyle(
-                        color: Colors.grey.shade600,
-                        fontSize: 16,
-                      ),
-                      prefixIcon: Icon(
-                        Icons.search,
-                        color: _isSearching
-                            ? const Color(0xFF4A90E2)
-                            : Colors.grey.shade600,
-                      ),
-                      border: InputBorder.none,
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          result.name,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text('Description: ${result.desc}'),
+                      ],
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
-              ],
-            ),
-          ),
-          if (_isSearching) const CircularProgressIndicator(),
-          if (_errorMessage.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                _errorMessage,
-                style: const TextStyle(color: Colors.red),
               ),
-            ),
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: _searchResults.length,
-              itemBuilder: (context, index) {
-                final startup = _searchResults[index];
-                return _SearchResultCard(
-                  title: startup.name,
-                  onTap: (title) {
-                    Navigator.pushNamed(
-                      context,
-                      '/startup/${startup.id}',  // Navigate using the ID
-                    );
-                  },
-                );
-              },
-            ),
+            );
+          },
+        )
+      : Center(
+          child: Text(
+            "No data",
+            style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
           ),
-        ],
+        ),
+),
+
+          ],
+        ),
       ),
     );
   }
-}
-
-class _SearchResultCard extends StatelessWidget {
-  final String title;
-  final void Function(String) onTap;
-
-  const _SearchResultCard({
-    required this.title,
-    required this.onTap,
-  });
 
   @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      color: Colors.white,
-      margin: const EdgeInsets.only(bottom: 8),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(
-          color: Colors.grey.shade200,
-        ),
-      ),
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 8,
-        ),
-        title: Text(
-          title,
-          style: const TextStyle(
-            color: Color(0xFF2C3E50),
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        trailing: const Icon(
-          Icons.arrow_forward_ios,
-          size: 16,
-          color: Color(0xFF4A90E2),
-        ),
-        onTap: () => onTap(title),
-      ),
-    );
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 }

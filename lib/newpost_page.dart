@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'data_model.dart';
 
 class NetworkTheme {
   static ThemeData get theme => ThemeData(
@@ -79,12 +80,12 @@ class NewpostPage extends StatefulWidget{
         Map body = {
           'name' : _titleController.text ,
           'desc' :_descriptionController.text,
-          'founder' : uname,
+          'founder' : uname
           };
 
         var body_json = jsonEncode(body);
 
-        var uri = Uri.parse('http://10.53.15.225:8000/create/');
+        var uri = Uri.parse('https://networkk.onrender.com/create/');
 
         try {
           await http.post(uri, body: body_json, headers: header);
@@ -93,7 +94,6 @@ class NewpostPage extends StatefulWidget{
                     content: Text('Post created successfully!'),
                     backgroundColor: Colors.green,
                   ),
-          
           );
         } on Exception catch (e) {throw Exception(e);
   // TODO

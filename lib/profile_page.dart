@@ -68,7 +68,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
 
   Future<Map<String, dynamic>> fetchData() async {
-    final response = await http.get(Uri.parse('http://10.53.15.225:8000/profile/'));
+    final response = await http.get(Uri.parse('https://networkk.onrender.com:/profile/'));
 
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = jsonDecode(response.body);
@@ -119,11 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             height: 130,
                             width: 350,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              image: DecorationImage(
-                                image: NetworkImage('https://static.vecteezy.com/system/resources/thumbnails/022/120/004/small/close-up-of-blue-water-in-the-pool-side-view-bokeh-light-background-in-the-pool-photo.jpg'),
-                                fit: BoxFit.cover,
-                                opacity: 0.6)),
+                              borderRadius: BorderRadius.circular(15),),
                             child: Column(
                               children : [ Text(
                               '${ud.username}'.toUpperCase(),

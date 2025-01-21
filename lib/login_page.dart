@@ -59,7 +59,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   void _handleLogin() async {
     if (_formKey.currentState?.validate() ?? false) {
       final response = await http.post(
-        Uri.parse('http://10.53.15.225:8000/'),
+        Uri.parse('https://networkk.onrender.com/'),
         body: {
           'username': _usernameController.text,
           'password': _passwordController.text,
@@ -137,7 +137,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                               radius: 50,
                               backgroundColor: Colors.transparent,
                               backgroundImage: NetworkImage(
-                                'https://www.hollywoodreporter.com/wp-content/uploads/2012/12/img_logo_blue.jpg?w=1440&h=810&crop=1'
+                                'https://i.ibb.co/T2NMWdQ/networkk.png'
                               ),
                             ),
                           ),
