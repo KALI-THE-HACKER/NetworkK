@@ -22,8 +22,8 @@
 
 ### ✨ Screenshots
 
-| **Homepage**        | **Startup Details** | **User Profile**    |
-|---------------------|---------------------|---------------------|
+|     **Homepage**    |**Create Post Page**|
+|---------------------|---------------------|
 | ![Home Page](https://github.com/user-attachments/assets/fd715cf7-e4d1-4121-a3bd-7336459a0009) | ![Create Post Page](https://github.com/user-attachments/assets/f7c05e26-21e5-425d-8817-a089fdae8200)
  |
 
